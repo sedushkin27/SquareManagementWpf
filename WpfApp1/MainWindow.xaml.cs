@@ -22,7 +22,7 @@ namespace WpfApp1
     public partial class MainWindow : Window
     {
         const double step = 10;
-        private SquareState squareState = new SquareState();
+        private SquareState squareState;
 
         public MainWindow()
         {

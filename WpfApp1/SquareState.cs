@@ -11,10 +11,5 @@ namespace WpfApp1
     public class SquareState
     {
         public Point Position { get; set; }
-
-        public SquareState() 
-        {
-            Position = new Point();
-        }
     }
 }
