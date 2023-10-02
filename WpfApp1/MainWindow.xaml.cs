@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -20,26 +21,26 @@ namespace WpfApp1
 
     public partial class MainWindow : Window
     {
-        private const string SaveFiveName = "squarestate.xml";
-        private SquareState squareState;
+        const double step = 10;
+        private SquareState squareState = new SquareState();
 
         public MainWindow()
         {
             InitializeComponent();
+        }
 
-            squareState = LoadSquareSatate();
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            squareState = SquareStateSerializer.LoadSquareState();
 
-            if (squareState != null ) { square.Margin = new Thickness(squareState.Left, squareState.Top, 0, 0); }
-            else { squareState = new SquareState(); }
-
-            KeyDown += MainWindow_KeyDown;
-            Closing += MainWindow_Closing;
+            if (squareState != null)
+            {
+               square.Margin = new Thickness(squareState.Position.X, squareState.Position.Y, 0, 0);
+            }
         }
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            double step = 10;
-
             switch (e.Key)
             {
                 case Key.A:
@@ -59,49 +60,8 @@ namespace WpfApp1
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            squareState.Left = square.Margin.Left;
-            squareState.Top = square.Margin.Top;
-
-            SaveSquareState(squareState);
-        }
-
-        private void SaveSquareState(SquareState state) 
-        {
-            try
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(SquareState));
-
-                using (StreamWriter writer = new StreamWriter(SaveFiveName))
-                {
-                    serializer.Serialize(writer, state);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failure to maintain the status: {ex.Message}", "error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private SquareState LoadSquareSatate()
-        {
-            if (File.Exists(SaveFiveName))
-            {
-                try
-                {
-                    XmlSerializer serializer = new XmlSerializer(typeof(SquareState));
-
-                    using (StreamReader reader = new StreamReader(SaveFiveName))
-                    {
-                        return (SquareState)serializer.Deserialize(reader);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Mistake of the status upload: {ex.Message}", "error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-
-            return null;
+            squareState.Position = new Point(square.Margin.Left, square.Margin.Top);
+            SquareStateSerializer.SaveSquareState(squareState);
         }
     }
 }
