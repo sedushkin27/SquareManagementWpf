@@ -9,9 +9,9 @@ using System.Xml.Serialization;
 
 namespace WpfApp1
 {
-    public class SquareStateSerializer
+    public static class SquareStateSerializer
     {
-        private static readonly string FileName = "squarestate.xml";
+        private const string FileName = "squarestate.xml";
         private static readonly XmlSerializer Serializer = new XmlSerializer(typeof(Point));
 
         public static void SaveSquareState(Point state)
@@ -25,7 +25,7 @@ namespace WpfApp1
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failure to maintain the status: {ex.Message}", "error", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw ex;
             }
 
         }
@@ -43,7 +43,7 @@ namespace WpfApp1
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Mistake of the status upload: {ex.Message}", "error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    throw ex;
                 }
             }
 

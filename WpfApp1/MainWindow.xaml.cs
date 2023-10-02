@@ -21,7 +21,7 @@ namespace WpfApp1
 
     public partial class MainWindow : Window
     {
-        const double step = 10;
+        const double Step = 10;
         private Point squareState;
 
         public MainWindow()
@@ -31,7 +31,14 @@ namespace WpfApp1
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            squareState = SquareStateSerializer.LoadSquareState();
+            try
+            {
+                squareState = SquareStateSerializer.LoadSquareState();
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show($"Mistake of the status upload: {ex.Message}", "error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
             if (squareState != null)
             {
@@ -44,24 +51,31 @@ namespace WpfApp1
             switch (e.Key)
             {
                 case Key.A:
-                    square.Margin = new Thickness(square.Margin.Left - step, square.Margin.Top, 0, 0);
+                    square.Margin = new Thickness(square.Margin.Left - Step, square.Margin.Top, 0, 0);
                     break;
                 case Key.D:
-                    square.Margin = new Thickness(square.Margin.Left + step, square.Margin.Top, 0, 0);
+                    square.Margin = new Thickness(square.Margin.Left + Step, square.Margin.Top, 0, 0);
                     break;
                 case Key.W:
-                    square.Margin = new Thickness(square.Margin.Left, square.Margin.Top - step, 0, 0);
+                    square.Margin = new Thickness(square.Margin.Left, square.Margin.Top - Step, 0, 0);
                     break;
                 case Key.S:
-                    square.Margin = new Thickness(square.Margin.Left, square.Margin.Top + step, 0, 0);
+                    square.Margin = new Thickness(square.Margin.Left, square.Margin.Top + Step, 0, 0);
                     break;
             }
         }
 
-        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             squareState = new Point(square.Margin.Left, square.Margin.Top);
-            SquareStateSerializer.SaveSquareState(squareState);
+            try
+            {
+                SquareStateSerializer.SaveSquareState(squareState);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failure to maintain the status: {ex.Message}", "error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
