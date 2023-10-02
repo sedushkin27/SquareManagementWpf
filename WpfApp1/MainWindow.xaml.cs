@@ -22,7 +22,7 @@ namespace WpfApp1
     public partial class MainWindow : Window
     {
         const double step = 10;
-        private SquareState squareState;
+        private Point squareState;
 
         public MainWindow()
         {
@@ -35,7 +35,7 @@ namespace WpfApp1
 
             if (squareState != null)
             {
-               square.Margin = new Thickness(squareState.Position.X, squareState.Position.Y, 0, 0);
+               square.Margin = new Thickness(squareState.X, squareState.Y, 0, 0);
             }
         }
 
@@ -60,7 +60,7 @@ namespace WpfApp1
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            squareState.Position = new Point(square.Margin.Left, square.Margin.Top);
+            squareState = new Point(square.Margin.Left, square.Margin.Top);
             SquareStateSerializer.SaveSquareState(squareState);
         }
     }

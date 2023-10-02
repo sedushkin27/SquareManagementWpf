@@ -12,9 +12,9 @@ namespace WpfApp1
     public class SquareStateSerializer
     {
         private static readonly string FileName = "squarestate.xml";
-        private static readonly XmlSerializer Serializer = new XmlSerializer(typeof(SquareState));
+        private static readonly XmlSerializer Serializer = new XmlSerializer(typeof(Point));
 
-        public static void SaveSquareState(SquareState state)
+        public static void SaveSquareState(Point state)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace WpfApp1
 
         }
 
-        public static SquareState LoadSquareState()
+        public static Point LoadSquareState()
         {
             if (File.Exists(FileName))
             {
@@ -38,7 +38,7 @@ namespace WpfApp1
                 {
                     using (StreamReader reader = new StreamReader(FileName))
                     {
-                        return (SquareState)Serializer.Deserialize(reader);
+                        return (Point)Serializer.Deserialize(reader);
                     }
                 }
                 catch (Exception ex)
@@ -47,7 +47,7 @@ namespace WpfApp1
                 }
             }
 
-            return null;
+            return new Point();
         }
     }
 }
